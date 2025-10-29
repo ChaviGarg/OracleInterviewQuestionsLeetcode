@@ -1,0 +1,89 @@
+class ListNode{
+    int key;
+    int value;
+    ListNode next;
+    ListNode(int key, int value){
+        this.key = key;
+        this.value = value;
+        this.next = null;
+    }
+}
+
+
+class MyHashMap {
+
+    ListNode[] map;
+    private final static int MAX_SIZE = 1009;  
+    // A prime like 1009 helps distribute keys more evenly than 1000, since 1000 has many divisors (2, 4, 5, 10, etc.)
+
+
+    public MyHashMap() {
+        map = new ListNode[MAX_SIZE];
+        
+    }
+    
+    public void put(int key, int value) {
+        int index = key % MAX_SIZE;
+        if(map[index] != null){
+            ListNode node = map[index];
+            ListNode prev = node;
+            while(node != null){
+                if(node.key == key){
+                    node.value = value;
+                    return;
+                }
+                prev = node;
+                node = node.next;
+            }
+            prev.next = new ListNode(key, value);
+        }else{
+            map[index] = new ListNode(key, value);
+        }
+    }
+    
+    public int get(int key) {
+        int index = key % MAX_SIZE;
+        if(map[index] == null)
+            return -1;
+        else{
+           ListNode node = map[index];
+           while(node != null){
+            if(node.key == key)
+                return node.value;
+            node = node.next;
+           }
+        }
+        return -1;
+    }
+    
+    public void remove(int key) {
+        int index = key % MAX_SIZE;
+        if(map[index] != null){
+            ListNode node = map[index];
+            if(node.key == key){
+                map[index] = node.next;
+                return;
+            }
+            ListNode prev = node;
+            node = node.next;
+            while(node != null){
+                if(node.key == key){
+                    prev.next = node.next;
+                    return;
+                }
+                prev = node;
+                node = node.next;
+                
+            }
+
+        }
+    }
+}
+
+/**
+ * Your MyHashMap object will be instantiated and called as such:
+ * MyHashMap obj = new MyHashMap();
+ * obj.put(key,value);
+ * int param_2 = obj.get(key);
+ * obj.remove(key);
+ */

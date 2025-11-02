@@ -1,0 +1,37 @@
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int max = Integer.MIN_VALUE;
+        List<Integer> result = new ArrayList<>();
+        Deque<Integer> deque = new ArrayDeque<>();
+        int i=0, j = 0, n = nums.length;
+        while(j < n){
+            max = Math.max(max, nums[j]);
+            while(! deque.isEmpty() && nums[j] > deque.peekLast()){
+                deque.removeLast();
+            }
+            deque.addLast(nums[j]);
+            if(j-i+1 < k)
+                j++;
+            else if(j-i+1 == k){
+                result.add(max);
+                j++;
+            }else{
+                while(j-i+1 > k){
+                    if(! deque.isEmpty() && deque.peekFirst() == nums[i]){
+                        deque.removeFirst();
+                        max = deque.peekFirst();
+                    }
+                    i++;
+                }
+                result.add(max);
+                j++;
+            }
+            
+        }
+        return result.stream().mapToInt(a -> a).toArray();
+    }
+}
+
+
+Time : O(n) Each elemnt pushed and popped fromd eque once and one for loop
+Space : O(k) The size of the deque can grow a maximum up to a size of k. 

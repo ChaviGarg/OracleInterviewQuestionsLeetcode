@@ -1,0 +1,47 @@
+class Solution {
+    public int numIslands(char[][] grid) {
+        int count = 0;
+        for(int i=0; i < grid.length; i++){
+            for(int j=0; j < grid[0].length; j++){
+                if(grid[i][j] == '1'){
+                    dfs(grid, i, j);
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+    private void dfs(char[][] grid, int x, int y){
+        if(x >= 0 && y >= 0 && x < grid.length && y < grid[0].length && grid[x][y] == '1'){
+            grid[x][y] = '0';
+            dfs(grid, x-1, y);
+            dfs(grid, x+1, y);
+            dfs(grid, x, y-1);
+            dfs(grid, x , y+1);
+        }
+    }
+}
+
+🔹 Time Complexity: O(M × N)
+Let:
+M = grid.length (number of rows)
+N = grid[0].length (number of columns)
+Reasoning:
+You visit each cell in the grid at most once.
+When a cell is '1', DFS marks it '0', and you never visit it again.
+The outer loops check every cell once → M × N iterations.
+The DFS explores adjacent cells but only visits unvisited land cells once.
+✅ Each cell contributes a constant amount of work (push + pop + mark).
+So total time = O(M × N).
+
+
+🔹 Space Complexity
+Two parts to consider:
+1️⃣ Recursive call stack (DFS depth)
+In the worst case, if the entire grid is land ('1' everywhere), the recursion could go as deep as M × N.
+So, recursive stack space = O(M × N) (worst case).
+2️⃣ Input modification
+You modify grid in-place (no extra visited matrix).
+Hence no additional memory except recursion stack.
+✅ Space = O(M × N) in worst case (recursion depth).
+If you used an explicit stack (iterative DFS or BFS), it’d also be O(M × N) in queue/stack space.
